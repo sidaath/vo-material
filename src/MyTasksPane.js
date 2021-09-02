@@ -3,8 +3,6 @@ import { Card, CardContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import TaskCardMini from './TaskCardMini';
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 const useStyles = makeStyles({
   pane: {
     minHeight: '93vh',
@@ -15,7 +13,7 @@ const useStyles = makeStyles({
 
 export default function MyTasksPane(props) {
   const tasks = props.tasks;
-  console.log('tasks at mytaskspane = ', tasks);
+
   const classes = useStyles();
 
   return (

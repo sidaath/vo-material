@@ -9,9 +9,7 @@ import Tasks from './Tasks';
 function TaskManagement() {
   const [display, setDisplay] = useState('tasks');
 
-  useEffect(() => {
-    console.log('rendered ', display);
-  }, [display]);
+  useEffect(() => {}, [display]);
 
   function handleTabClick(event) {
     setDisplay(event.target.dataset.destination);

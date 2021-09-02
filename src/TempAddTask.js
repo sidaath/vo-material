@@ -43,6 +43,8 @@ export default function TempAddTask(props) {
 
     console.log(task);
     addTask(task);
+    setTitle('');
+    setDescription('');
   }
 
   return (
@@ -57,6 +59,7 @@ export default function TempAddTask(props) {
         <OutlinedInput
           id='task-title'
           label='Task Title'
+          value={title}
           onChange={handleTitleChange}
         />
       </FormControl>
@@ -69,6 +72,7 @@ export default function TempAddTask(props) {
         multiline
         rows={4}
         variant='outlined'
+        value={description}
       />
       <Button
         onClick={handleInput}

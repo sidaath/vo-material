@@ -5,8 +5,9 @@ import {
   CardHeader,
   Typography,
 } from '@material-ui/core';
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { TaskDB } from './Tasks';
 
 const useStyles = makeStyles({
   click: {
@@ -23,15 +24,15 @@ const useStyles = makeStyles({
 });
 
 export default function TaskCardMini({ task }) {
+  const { setInspecting } = useContext(TaskDB);
   const classes = useStyles();
 
+  function handleClick() {
+    setInspecting(task);
+  }
+
   return (
-    <CardActionArea
-      className={classes.click}
-      onClick={() => {
-        alert(task.id);
-      }}
-    >
+    <CardActionArea className={classes.click} onClick={handleClick}>
       <Card className={classes.card}>
         <CardHeader title={task.title} />
         <CardContent>
