@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AssignTasksAddTask from './AssignTasksAddTask';
