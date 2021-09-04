@@ -1,9 +1,35 @@
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
 import React from 'react';
+import AssignAddTaskDetails from './AssignAddTaskDetails';
+import AssignEmployeesPane from './AssignEmployeesPane';
+import AssignTaskDrafts from './AssignTaskDrafts';
+
+const useStyles = makeStyles({
+  paneContainer: {
+    marginTop: '1vh',
+    marginBottom: '1vh',
+    minHeight: '93vh',
+    background: 'green',
+    maxHeight: '93vh',
+  },
+});
 
 export default function Assign() {
+  const classes = useStyles();
+
   return (
-    <div>
-      <h1>Assign</h1>
-    </div>
+    <Grid container className={classes.paneContainer}>
+      <Grid item xs={3}>
+        <AssignEmployeesPane />
+      </Grid>
+      <Grid item xs={6}>
+        <AssignAddTaskDetails />
+      </Grid>
+      <Grid item xs={3}>
+        <AssignTaskDrafts />
+      </Grid>
+    </Grid>
   );
 }

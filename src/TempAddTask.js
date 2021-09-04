@@ -1,3 +1,4 @@
+//called from -> TaskReportsPane.js
 import {
   Button,
   FormControl,
@@ -33,12 +34,17 @@ export default function TempAddTask(props) {
   }
 
   function handleInput() {
+    if (!(title && description)) return;
+
     const id = uuidv4();
 
     const task = {
       id,
       title,
       description,
+      inProgress: false,
+      overDue: false,
+      dueDate: null,
     };
 
     console.log(task);

@@ -1,3 +1,5 @@
+//called from -> Tasks.js
+
 import React from 'react';
 import { Card, CardContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,11 +10,13 @@ const useStyles = makeStyles({
     minHeight: '93vh',
     maxHeight: '93vh',
     overflowY: 'auto',
+    background: '#f9f9f9',
   },
 });
 
 export default function MyTasksPane(props) {
   const tasks = props.tasks;
+  const handleTaskChange = props.handleTaskChange;
 
   const classes = useStyles();
 
@@ -21,7 +25,13 @@ export default function MyTasksPane(props) {
       <CardContent>MyTasks</CardContent>
       <CardContent>
         {tasks.map((task) => {
-          return <TaskCardMini key={task.id} task={task} />;
+          return (
+            <TaskCardMini
+              key={task.id}
+              task={task}
+              handleTaskChange={handleTaskChange}
+            />
+          );
         })}
       </CardContent>
     </Card>

@@ -6,6 +6,7 @@ import MyTasksPane from './MyTasksPane';
 import TaskReportsPane from './TaskReportsPane';
 
 export const TaskDB = React.createContext();
+export const EmployeeDB = React.createContext();
 
 const useStyles = makeStyles({
   paneContainer: {
@@ -18,38 +19,62 @@ const useStyles = makeStyles({
 });
 
 const LOCAL_STORAGE_KEY = 'vo-material.tasks';
-
 export default function Tasks() {
   const classes = useStyles();
 
+  //taskDB has all the tasks this person has to do.
+  //task has -> id, title, description, inProgress(bool), overDue(bool), dueDate(null for now)
   const [taskDB, setTaskDB] = useState([]);
 
+  //inspecting = task that should be displayed in the inspect pane -> with add comment and mark complete btn
+  const [inspecting, setInspecting] = useState(taskDB[0]);
+
+  //REPLACE WITH SERVER FETCH
+  //get tasks from local storage the first time the app starts
   useEffect(() => {
     const tasksJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (tasksJSON != null) {
       setTaskDB(JSON.parse(tasksJSON));
     }
   }, []);
-  const [inspecting, setInspecting] = useState(taskDB[0]);
 
+  //REPLACE WITH SERVER FETCH
+  //write changes to taskDB to local storage
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(taskDB));
   }, [taskDB]);
 
-  // console.log('from TASKS.JS', taskDB[0]);
-
+  //add a task to taskDB
   function addTask(task) {
     setTaskDB([...taskDB, task]);
     console.log('TASKS.JS addt ', taskDB);
   }
 
-  const taskDataContextValues = { taskDB, inspecting, setInspecting };
+  //when a task is changed (inProgress / overDue/ etc) -> write changes to taskDB
+  function handleTaskChange(id, task) {
+    const newTaskDB = [...taskDB];
+    const index = newTaskDB.findIndex((task) => task.id === id);
+    newTaskDB[index] = task;
+    setTaskDB(newTaskDB);
+  }
+
+  function deleteTask(id) {
+    setTaskDB(taskDB.filter((task) => task.id !== id));
+  }
+
+  //this is for TaskDB context.
+  const taskDataContextValues = {
+    taskDB,
+    inspecting,
+    setInspecting,
+    deleteTask,
+  };
 
   return (
     <TaskDB.Provider value={taskDataContextValues}>
       <Grid container className={classes.paneContainer}>
         <Grid item xs={3}>
-          <MyTasksPane tasks={taskDB} />
+          <MyTasksPane tasks={taskDB} handleTaskChange={handleTaskChange} />
         </Grid>
         <Grid item xs={6}>
           <InspectTasksPane />

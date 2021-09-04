@@ -21,9 +21,9 @@ export default function TaskDetails() {
   const classes = useStyles();
   return (
     <Card className={classes.details}>
-      <CardHeader title={inspecting.title || `No Task`} />
+      <CardHeader title={inspecting.title} />
       <CardContent>
-        <Typography>{inspecting.description || ``}</Typography>
+        <Typography>{inspecting.description}</Typography>
       </CardContent>
     </Card>
   );
