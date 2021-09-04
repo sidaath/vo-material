@@ -1,6 +1,8 @@
-import { Card, Typography } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import AssignTasksAddTask from './AssignTasksAddTask';
+import AssignTasksStats from './AssignTasksStats';
 
 const useStyles = makeStyles({
   pane: {
@@ -15,7 +17,13 @@ export default function AssignAddTaskDetails() {
 
   return (
     <Card className={`${classes.pane}`}>
-      <Typography>ASSIGN MIDDLE</Typography>
+      <CardContent>
+        <AssignTasksAddTask />
+      </CardContent>
+
+      <CardContent>
+        <AssignTasksStats />
+      </CardContent>
     </Card>
   );
 }

@@ -1,0 +1,29 @@
+File structure  - components and children component 
+
+TaskManagement.js  
+    -> TabBar.js   
+            -> no children
+    
+    -> Tasks.js 
+            -> MyTasksPane.js
+                    -> TaskCardMini.js
+
+            -> InspectTasksPane.js
+                    -> TaskCardInspect.js
+                            -> TaskDetails.js
+                            -> AddComment.js
+
+            -> TaskReportsPane.js
+                    -> TempAddTask.js
+
+    -> Inspect.js
+
+    -> Assign.js
+            -> AssignAddTaskDetails
+
+            -> AssignEmployeesPane
+                    -> EmployeeCardMini
+
+            -> AssignTaskDrafts
+
+    -> Reports.js

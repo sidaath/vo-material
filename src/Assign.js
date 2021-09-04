@@ -2,7 +2,7 @@ import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import React from 'react';
-import AssignAddTaskDetails from './AssignAddTaskDetails';
+import AssignAddTaskDetails from './AssignTaskMiddlePane';
 import AssignEmployeesPane from './AssignEmployeesPane';
 import AssignTaskDrafts from './AssignTaskDrafts';
 
