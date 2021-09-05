@@ -1,13 +1,13 @@
 import { Card, CardContent, CardHeader, TextField } from '@material-ui/core';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { employees } from './employees';
+
 import EmployeeCardMini from './EmployeeCardMini';
 import { Autocomplete } from '@material-ui/lab';
+import { EmployeeDB } from './Assign';
 
 //REPLACE WITH SERVER FETCH
-const employeeDB = employees;
-console.log(employeeDB);
+
 const useStyles = makeStyles({
   pane: {
     minHeight: '93vh',
@@ -23,6 +23,8 @@ const useStyles = makeStyles({
 
 export default function AssignEmployeesPane() {
   const classes = useStyles();
+
+  const { employeeDB } = useContext(EmployeeDB);
 
   //for the autocomplete employee name search thing
   const employeeProps = {

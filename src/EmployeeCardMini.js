@@ -1,4 +1,4 @@
-import { Card, Typography } from '@material-ui/core';
+import { Button, Card, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,14 +26,41 @@ const useStyles = makeStyles({
   delete: {
     cursor: 'pointer',
   },
+
+  addBtn: {
+    right: 2,
+  },
 });
 
 export default function EmployeeCardMini(props) {
-  const classes = useStyles();
+  console.log('emp card mini');
+
+  let classes = useStyles();
   const employee = props.employee;
+  const assign = props.assign;
+  const addEmployeeToTask = props.addEmployeeToTask;
+  const setDisplayEmployee = props.setDisplayEmployee;
+
+  function handleClick() {
+    addEmployeeToTask(employee);
+    setDisplayEmployee(null);
+  }
+
   return (
     <Card className={classes.card}>
       <Typography>{employee.name}</Typography>
+      {assign && (
+        <Grid container justifyContent='flex-end'>
+          <Button
+            className={classes.addBtn}
+            variant='contained'
+            color='primary'
+            onClick={handleClick}
+          >
+            Add
+          </Button>
+        </Grid>
+      )}
     </Card>
   );
 }

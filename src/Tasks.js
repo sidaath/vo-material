@@ -6,7 +6,6 @@ import MyTasksPane from './MyTasksPane';
 import TaskReportsPane from './TaskReportsPane';
 
 export const TaskDB = React.createContext();
-export const EmployeeDB = React.createContext();
 
 const useStyles = makeStyles({
   paneContainer: {
@@ -18,7 +17,7 @@ const useStyles = makeStyles({
   },
 });
 
-const LOCAL_STORAGE_KEY = 'vo-material.tasks';
+const LOCAL_STORAGE_KEY = 'vo-material.my-tasks';
 export default function Tasks() {
   const classes = useStyles();
 
