@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import EmployeeCardMini from './EmployeeCardMini';
 import { Autocomplete } from '@material-ui/lab';
-import { EmployeeDB } from './Assign';
+import { AssignDB } from './Assign';
 
 //REPLACE WITH SERVER FETCH
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
 export default function AssignEmployeesPane() {
   const classes = useStyles();
 
-  const { employeeDB } = useContext(EmployeeDB);
+  const { employeeDB } = useContext(AssignDB);
 
   //for the autocomplete employee name search thing
   const employeeProps = {

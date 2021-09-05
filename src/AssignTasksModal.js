@@ -33,8 +33,6 @@ const useStyles = makeStyles({
 });
 
 export default function AssignTasksModal(props) {
-  console.log('modal ');
-
   const classes = useStyles();
 
   const { setOpen, employeeDB, open, addEmployeeToTask } = props;
@@ -44,7 +42,7 @@ export default function AssignTasksModal(props) {
   const [displayEmployee, setDisplayEmployee] = useState(null);
 
   //show only the employee with the employee id = value inside the selecting employees for task pane
-  function addSelectedEmployee(event, value) {
+  function showSelectedEmployee(event, value) {
     if (value) {
       const employeeToDisplay = employeeDB.filter((em) => em.id === value.id);
       setDisplayEmployee(employeeToDisplay[0]);
@@ -80,7 +78,7 @@ export default function AssignTasksModal(props) {
                       margin='normal'
                     />
                   )}
-                  onChange={addSelectedEmployee}
+                  onChange={showSelectedEmployee}
                 />
               </Grid>
 

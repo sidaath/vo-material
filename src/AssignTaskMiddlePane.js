@@ -12,13 +12,15 @@ const useStyles = makeStyles({
     background: '#f9f9f9',
   },
 });
-export default function AssignAddTaskDetails() {
+export default function AssignAddTaskDetails(props) {
   const classes = useStyles();
+
+  const keys = props.keys;
 
   return (
     <Card className={`${classes.pane}`}>
       <CardContent>
-        <AssignTasksAddTask />
+        <AssignTasksAddTask keys={keys} />
       </CardContent>
 
       <CardContent>

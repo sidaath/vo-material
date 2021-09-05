@@ -33,8 +33,6 @@ const useStyles = makeStyles({
 });
 
 export default function EmployeeCardMini(props) {
-  console.log('emp card mini');
-
   let classes = useStyles();
   const employee = props.employee;
   const assign = props.assign;

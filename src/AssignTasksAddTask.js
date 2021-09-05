@@ -1,10 +1,17 @@
-import { Button, Card, CardContent, Grid, TextField } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import React, { Fragment, useState, useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { v4 as uuidv4 } from 'uuid';
-import { EmployeeDB } from './Assign';
+import { AssignDB } from './Assign';
 
 import { format } from 'date-fns';
 import AssignTasksModal from './AssignTasksModal';
@@ -15,94 +22,114 @@ const useStyles = makeStyles({
   },
 });
 
-const LOCAL_STORAGE_KEY = 'vo-material.assigned-tasks';
-const LOCAL_STORAGE_KEY_drafts = 'vo-material.drafts';
-
 export default function AssignTasksAddTask() {
-  console.log('render MAIN');
+  console.log('ATAT');
   const classes = useStyles();
 
-  const [isAssignedEmp, setIsAssignedEmp] = useState(false);
+  const {
+    employeeDB,
+    assignedTasksDB,
+    setAssignedTasksDB,
+    draftsDB,
+    setDraftsDB,
+    resume,
+    setResume,
+  } = useContext(AssignDB);
+  console.log('using context inside ATAT.JS');
 
-  //need employee list when selecting employees for a task
-  const { employeeDB } = useContext(EmployeeDB);
-  const [emps, setEmps] = useState(employeeDB);
+  useEffect(() => {
+    setTaskTitle(resume.title);
+    setTaskDescription(resume.description);
+    const draftedWorkers = resume.workers || [];
+    let newAvailableEmployeesArray = availableEmployees;
+    draftedWorkers.forEach((x) => {
+      console.log('FOR EACH ', x);
+      newAvailableEmployeesArray = newAvailableEmployeesArray.filter(
+        (y) => y.id !== x.id
+      );
+      setWorkers(draftedWorkers);
+      setIsWorkerAssigned(true);
+      setAvailableEmployees(newAvailableEmployeesArray);
+    });
 
+    console.log('RESUME WORKERS ARE ', draftedWorkers);
+  }, [resume]);
+
+  const [availableEmployees, setAvailableEmployees] = useState(employeeDB);
+  const [isWorkerAssigned, setIsWorkerAssigned] = useState(false);
+
+  //temp array of employees - refreshed after saving draft / adding task
+  const [workers, setWorkers] = useState([]);
+  useEffect(() => {
+    if (workers.length !== 0) {
+      setIsWorkerAssigned(true);
+    } else {
+      setIsWorkerAssigned(false);
+    }
+    console.log('newest val for is worker there -> ', isWorkerAssigned);
+  }, [workers]);
+
+  //DO NOT CHANGE
   //these two are for the tasks title and description -> getting input
   const [taskTitle, setTaskTitle] = useState('');
   const [taskDescription, setTaskDescription] = useState('');
-
-  //for the task deadline -> comes from mui datepicker
-  const [selectedDate, handleDateChange] = useState(new Date());
-
-  //add a task and its employees to this
-  const [assignedTasksDB, setAssignedTasksDB] = useState([]);
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(assignedTasksDB));
-    console.log('use effect -> depend on assignedTasksDB');
-  }, [assignedTasksDB]);
-
-  //add drafts to this
-  const [drafts, setDrafts] = useState([]);
-  useEffect(() => {
-    setAssignedEmployees([]);
-    setEmps(employeeDB);
-    localStorage.setItem(LOCAL_STORAGE_KEY_drafts, JSON.stringify(drafts));
-    console.log('use effect -> depends on drafts, employeeDB');
-  }, [drafts, employeeDB]);
-
-  //while adding employees to a task, hold them in this
-  const [assignedEmployees, setAssignedEmployees] = useState([]);
-  function addEmployeeToTask(employee) {
-    setAssignedEmployees([...assignedEmployees, employee]);
-    const availableEmployees = emps.filter((x) => x.id !== employee.id);
-    setEmps(availableEmployees);
-  }
-  useEffect(() => {
-    if (assignedEmployees.length !== 0) {
-      setIsAssignedEmp(true);
-      console.log('assigned emp is not empty');
-    } else {
-      console.log('assigned emp is EMPTY');
-    }
-  }, [assignedEmployees]);
-
   //get the value thats entered into task title.
   function getTaskTitle(event) {
     const title = event.target.value;
     setTaskTitle(title);
   }
-
   //get description of task from input
   function getTaskDescription(event) {
     const description = event.target.value;
     setTaskDescription(description);
   }
+  //END OF DO NOT CHANGE
+
+  //for the task deadline -> comes from mui datepicker
+  const [selectedDate, handleDateChange] = useState(new Date());
+
+  //what to do when clicking on ADD on an employee card, on the selecting employees for task bit
+  function addEmployeeToTask(employee) {
+    setWorkers([...workers, employee]);
+    const newAvailableEmployees = availableEmployees.filter(
+      (emp) => emp.id !== employee.id
+    );
+    setIsWorkerAssigned(true);
+    setAvailableEmployees(newAvailableEmployees);
+  }
 
   //what to do when clicking ADD TASK / SAVE DRAFT
   function handleOnClick() {
+    console.log('has worker? begin ', isWorkerAssigned);
     const assignedTask = {
       id: uuidv4(),
+      owner: 1,
       title: taskTitle,
       description: taskDescription,
       deadline: format(selectedDate, 'yyyy-MM-dd'),
-      workers: assignedEmployees,
+      workers: workers,
     };
 
-    if (!isAssignedEmp || taskDescription === '' || taskTitle === '') {
-      setDrafts([...drafts, assignedTask]);
+    if (isWorkerAssigned && taskDescription !== '' && taskTitle !== '') {
+      setAssignedTasksDB([...assignedTasksDB, assignedTask]);
+      console.log('saved to tasks');
     }
 
-    if (isAssignedEmp && taskDescription !== '' && taskTitle !== '') {
-      setAssignedTasksDB([...assignedTasksDB, assignedTask]);
+    if (!isWorkerAssigned || taskDescription === '' || taskTitle === '') {
+      setDraftsDB([...draftsDB, assignedTask]);
+      console.log('saved to drafts');
     }
 
     //reset input fields
     setTaskTitle('');
     setTaskDescription('');
-    setIsAssignedEmp(false);
-    setAssignedEmployees([]);
+
+    //after save draft / add task, temp array of assigned workers has to be reset.
+    setWorkers([]);
+    //after saving draft/ adding task, all employees are available for next task
+    setAvailableEmployees(employeeDB);
+    console.log('task = ', assignedTask);
+    console.log('has worker? after refresh ', isWorkerAssigned);
   }
 
   //FOR MODAL -OPEN AND CLOSE
@@ -111,19 +138,16 @@ export default function AssignTasksAddTask() {
     setOpen(true);
   };
 
-  //add task button
-  let btnValue = 'SAVE DRAFT';
-  function changeButtonText() {
-    if (taskTitle !== '' && taskDescription !== '' && isAssignedEmp) {
-      btnValue = 'Add Task';
-      console.log('changed btn val');
-    } else {
-      btnValue = 'Save Draft';
-      console.log('changed btn val');
+  let btnText = 'Save Draft';
+  function setButtonText() {
+    if (isWorkerAssigned && taskDescription !== '' && taskTitle !== '') {
+      btnText = 'Add Task';
+    }
+    if (!isWorkerAssigned || taskDescription === '' || taskTitle === '') {
+      btnText = 'Save Draft';
     }
   }
-
-  changeButtonText();
+  setButtonText();
 
   return (
     <Card className={classes.top}>
@@ -167,15 +191,15 @@ export default function AssignTasksAddTask() {
           </Grid>
           <Grid item>
             <Button variant='contained' color='primary' onClick={handleOnClick}>
-              {btnValue}
+              {btnText}
             </Button>
           </Grid>
         </Grid>
       </CardContent>
       <AssignTasksModal
-        setOpen={setOpen}
-        employeeDB={emps}
         open={open}
+        setOpen={setOpen}
+        employeeDB={availableEmployees}
         addEmployeeToTask={addEmployeeToTask}
       />
     </Card>
